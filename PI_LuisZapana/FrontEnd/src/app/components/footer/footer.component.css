@@ -1,0 +1,7 @@
+.row{
+    background-color: #a1b5cb;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
