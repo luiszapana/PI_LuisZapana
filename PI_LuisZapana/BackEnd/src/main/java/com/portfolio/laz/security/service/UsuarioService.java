@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-@Transactional
+@Service //Lógica de negocio y las operaciones de servicio que no están directamente relacionadas con la presentación o la persistencia
+@Transactional//Hace un rollback en caso de que la operación produzca un fallo
 public class UsuarioService {
     @Autowired
     IUsuarioRepository iUsuarioRepository;

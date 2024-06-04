@@ -2,20 +2,20 @@ package com.portfolio.laz.security.service;
 
 import com.portfolio.laz.security.entity.Rol;
 import com.portfolio.laz.security.enums.RolNombre;
-import com.portfolio.laz.security.repository.IRollRepository;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.portfolio.laz.security.repository.IRolRepository;
 
 @Service
-@Transactional
+@Transactional //Hace un rollback si una operación falla.
 public class RolService {
     @Autowired
-    IRollRepository iRolRepository;
+    IRolRepository iRolRepository;
     
     public Optional<Rol> getByRolNombre (RolNombre rolNombre){
-        return iRolRepository.findByRollNombre(rolNombre);
+        return iRolRepository.findByRolNombre(rolNombre);
     }
     
     public void save(Rol rol){

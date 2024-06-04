@@ -7,12 +7,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class UsuarioPrincipal implements UserDetails{
+public class UsuarioPrincipal implements UserDetails{//Encargada de la seguridad
     private String nombre;
     private String nombreUsuario;
     private String email;
     private String password;
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities; // se refiere a los roles o permisos que tiene un usuario autenticado.
 
     public UsuarioPrincipal(String nombre, String nombreUsuario, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.nombre = nombre;
@@ -26,7 +26,8 @@ public class UsuarioPrincipal implements UserDetails{
         List<GrantedAuthority> authorities = usuario.getRoles().stream()
                                             .map(rol -> new SimpleGrantedAuthority(rol.getRolNombre().name()))
                                             .collect(Collectors.toList());
-        return new UsuarioPrincipal(usuario.getNombre(), usuario.getNombreUsuario(), usuario.getEmail(), usuario.getPassword(), authorities);
+        return new UsuarioPrincipal(usuario.getNombre(), usuario.getNombreUsuario(), usuario.getEmail(), 
+                usuario.getPassword(), authorities);
     }
 
     @Override

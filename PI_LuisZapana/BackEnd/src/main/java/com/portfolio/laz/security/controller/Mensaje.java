@@ -1,8 +1,8 @@
 package com.portfolio.laz.security.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 
 @NoArgsConstructor

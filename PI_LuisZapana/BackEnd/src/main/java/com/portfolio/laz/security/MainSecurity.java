@@ -1,34 +1,37 @@
 package com.portfolio.laz.security;
 
-import com.portfolio.laz.security.jwt.JwtEntryPoint;
 import com.portfolio.laz.security.jwt.JwtTokenFilter;
-import com.portfolio.laz.security.service.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter; //deprecated
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder; 
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
-@EnableWebSecurity
-@EnableMethodSecurity (prePostEnabled = true)
-//@EnableGlobalMethodSecurity(prePostEnabled = true) // Esta anotación está obsoleta y se debe usar @EnableMethodSecurity en su lugar
-public class MainSecurity{
-    @Autowired
-    UserDetailsServiceImpl userDetailsServiceImpl;
-    @Autowired
-    JwtEntryPoint jwtEntryPoint;
-    
+import lombok.RequiredArgsConstructor;
+
+@Configuration //En los métodos marcados como bean se omite el modificador public
+@EnableWebSecurity //Las urls pasan por el método securityFilterChain
+@RequiredArgsConstructor
+public class MainSecurity {
+
+    private final JwtTokenFilter jwtTokenFilter;
+    private final AuthenticationProvider authProvider;
+
     @Bean
-    public JwtTokenFilter jwtTokenFilter(){
-        return new JwtTokenFilter();
-    }
-    
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {//cadena de filtros, SecurityFilterChain se utiliza en lugar de WebSecurityConfigurerAdapter
+        return http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authRequest -> authRequest
+                .requestMatchers("/auth/**").permitAll() //permite todas las urls que deriven de auth
+                .anyRequest().authenticated() //cualquier otra url requiere autenticación
+                )
+                .sessionManagement(sessionManager
+                        -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authProvider)
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 }

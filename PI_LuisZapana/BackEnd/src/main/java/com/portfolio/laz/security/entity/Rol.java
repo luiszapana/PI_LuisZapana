@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id; //Mati definió este campo como int
     @NotNull
     @Enumerated(EnumType.STRING)
     private RolNombre rolNombre;

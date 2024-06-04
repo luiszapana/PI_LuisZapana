@@ -19,7 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter @Setter
 @Entity
-public class Usuario {
+public class Usuario {//accede directamente a la BD
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

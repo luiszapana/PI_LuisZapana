@@ -14,13 +14,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component //clase que debe ser registrada como un bean genérico, sin ninguna semántica específica
 public class JwtProvider {
     
     private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
-    @Value("${jwt.secret")
+    @Value("${jwt.secret}")
     private String secret;
-    @Value("${jwt.expiration")
+    @Value("${jwt.expiration}")
     private int expiration;
     
     public String generateToken (Authentication authentication){
@@ -28,7 +28,7 @@ public class JwtProvider {
         return Jwts.builder().setSubject(usuarioPrincipal.getUsername())
                 .setIssuedAt(new Date()).setExpiration(new Date(new Date().getTime()+expiration*1000))
                 .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
+                .compact(); //Genera el token
     }
     
     public String getNombreUsuarioFromToken(String token){
