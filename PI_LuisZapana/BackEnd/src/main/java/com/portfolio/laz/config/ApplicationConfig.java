@@ -1,5 +1,6 @@
-package com.portfolio.laz.security;
+package com.portfolio.laz.config;
 
+import com.portfolio.laz.repository.IUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,15 +11,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.portfolio.laz.security.service.UserDetailsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
 @Configuration //En esta clase se puede omitir el modificador public en los métodos declarados como beans
 @RequiredArgsConstructor
-public class ApplicationConf {
+public class ApplicationConfig {
 
-    private final UserDetailsServiceImpl UserDetailsServiceImpl; 
+    private final IUserRepository userRepository;
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -40,8 +40,8 @@ public class ApplicationConf {
 
     @Bean
     UserDetailsService userDetailService() {
-        return username -> UserDetailsServiceImpl.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found.."));
     }
 
 }
